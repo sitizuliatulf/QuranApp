@@ -10,7 +10,7 @@ class Banner extends PureComponent {
           animation={require("../../../assets/png/mosque.png")}
           header={"TIME"}
           name={"md-notifications"}
-          size={20}
+          size={18}
           color={"white"}
           statusIcon={"Mute"}
           informationTime={"12:40"}

@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
     height: layerIcon,
     backgroundColor: "rgba(255,255,255,0.3)",
     borderRadius: 10,
-    margin: 10
+    margin: 10,
+    padding: 10
   },
   containerIcon: {
     flexDirection: "row",
@@ -127,12 +128,7 @@ const BannerItem = ({
           <View style={styles.containerIcon}>
             <View style={styles.boxIconHeader}>
               <TouchableOpacity>
-                <Icon
-                  name={name}
-                  size={size}
-                  color={color}
-                  style={{ padding: 10 }}
-                />
+                <Icon name={name} size={size} color={color} />
               </TouchableOpacity>
             </View>
             <Text style={styles.statusIcon}>{statusIcon}</Text>

@@ -46,9 +46,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const BoxItem = ({ label, icon: Icon }) => {
+const BoxItem = ({ label, icon: Icon, onPress }) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.container}>
         <View style={styles.box}>
           <Icon width={WIDTH_ICON} height={HEIGHT_ICON} />

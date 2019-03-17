@@ -16,15 +16,14 @@ const styles = StyleSheet.create({
   containerTextDaily: {}
 });
 
-const Home = () => {
+const Home = props => {
   return (
     <View style={styles.container}>
       <View style={styles.banner}>
         <Banner />
       </View>
-
       <View style={styles.boxMenu}>
-        <BoxMenu />
+        <BoxMenu {...props} />
       </View>
       <View style={styles.containerTextDaily}>
         <Daily />

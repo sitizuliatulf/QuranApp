@@ -8,17 +8,19 @@ import {
   TimeSholat,
   Halal,
   Infaq,
-  Comunity
+  Comunity,
+  Tandain
 } from "../../utils/svg";
+import MainNavigator from "../../navigations/index";
 
 const DataIcon = [
   {
     icon: Mosque,
-    label: "Masjid"
+    label: "Mosque"
   },
   {
     icon: Qibla,
-    label: "Kiblat"
+    label: "Qibla"
   },
   {
     icon: Quran,
@@ -26,32 +28,39 @@ const DataIcon = [
   },
   {
     icon: TimeSholat,
-    label: "Waktu Solat"
+    label: "Prayer Time"
   },
   {
     icon: Halal,
-    label: "Tempat"
+    label: "Place"
   },
   {
     icon: Comunity,
-    label: "Komunitas"
+    label: "Community"
   },
   {
     icon: Infaq,
     label: "Infaq"
   },
   {
-    icon: Mosque,
-    label: "Tempat"
+    icon: Tandain,
+    label: "Marker"
   }
 ];
+
 class BoxMenu extends PureComponent {
   constructor() {
     super();
   }
 
-  _renderItem = ({ item: { label, icon } }) => {
-    return <BoxItem icon={icon} label={label} />;
+  _renderItem = ({ item: { label, icon, onPress } }) => {
+    return (
+      <BoxItem
+        icon={icon}
+        label={label}
+        onPress={() => this.props.navigation.navigate("PrayerTime")}
+      />
+    );
   };
 
   _keyExtractor = item => item.label;

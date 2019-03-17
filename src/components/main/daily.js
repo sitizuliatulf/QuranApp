@@ -10,7 +10,8 @@ class Daily extends PureComponent {
           textHeaderDaily={"Featured"}
           buttonTextHeader={"View All"}
           TextBoxHeaderDaily={"Daily Dawah"}
-          // backgroundDaily={require("../../../assets/jpg/background-daily.jpg")}
+          TextDaily={"Amazing! Virtue and greaatness of prayer"}
+          backgroundDaily={require("../../../assets/jpg/background-daily.jpg")}
         />
       </View>
     );

@@ -65,7 +65,9 @@ const styles = StyleSheet.create({
 const HeaderDaily = ({
   textHeaderDaily,
   buttonTextHeader,
-  TextBoxHeaderDaily
+  TextBoxHeaderDaily,
+  backgroundDaily,
+  TextDaily
 }) => {
   return (
     <View style={styles.container}>
@@ -76,17 +78,20 @@ const HeaderDaily = ({
         </TouchableOpacity>
       </View>
       <View style={styles.box}>
-        {/* <ImageBackground
+        <ImageBackground
           source={backgroundDaily}
-          style={{ width: "100%", height: "100%" }}
+          style={{ height: height }}
           resizeMode="stretch"
-        /> */}
-        <View style={styles.containerBoxHeader}>
-          <View style={styles.boxHeaderDaily}>
-            <Text style={styles.TextBoxHeaderDaily}>{TextBoxHeaderDaily}</Text>
+        >
+          <View style={styles.containerBoxHeader}>
+            <View style={styles.boxHeaderDaily}>
+              <Text style={styles.TextBoxHeaderDaily}>
+                {TextBoxHeaderDaily}
+              </Text>
+            </View>
+            <Text style={styles.TextBoxHeaderDaily}>{TextDaily}</Text>
           </View>
-          <Text style={styles.TextBoxHeaderDaily}>{TextBoxHeaderDaily}</Text>
-        </View>
+        </ImageBackground>
       </View>
     </View>
   );
