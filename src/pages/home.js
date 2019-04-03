@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import { View, StyleSheet } from "react-native";
 import BoxMenu from "../components/main/box-menu";
 import Banner from "../components/main/banner";
@@ -16,20 +16,22 @@ const styles = StyleSheet.create({
   containerTextDaily: {}
 });
 
-const Home = props => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.banner}>
-        <Banner />
+class Home extends PureComponent {
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.banner}>
+          <Banner />
+        </View>
+        <View style={styles.boxMenu}>
+          <BoxMenu {...this.props} />
+        </View>
+        <View style={styles.containerTextDaily}>
+          <Daily />
+        </View>
       </View>
-      <View style={styles.boxMenu}>
-        <BoxMenu {...props} />
-      </View>
-      <View style={styles.containerTextDaily}>
-        <Daily />
-      </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 export default Home;
