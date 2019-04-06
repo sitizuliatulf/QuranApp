@@ -5,10 +5,16 @@ import PrayerTime from "../pages/prayer-time";
 const MainNavigator = createStackNavigator(
   {
     Home: {
-      screen: Home
+      screen: Home,
+      navigationOptions: {
+        header: null
+      }
     },
     PrayerTime: {
-      screen: PrayerTime
+      screen: PrayerTime,
+      navigationOptions: {
+        title: "Prayer Time"
+      }
     }
   },
   {

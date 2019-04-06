@@ -11,7 +11,7 @@ class Daily extends PureComponent {
           buttonTextHeader={"View All"}
           TextBoxHeaderDaily={"Daily Dawah"}
           TextDaily={"Amazing! Virtue and greaatness of prayer"}
-          backgroundDaily={require("../../../assets/jpg/background-daily.jpg")}
+          backgroundDaily={require("../../../assets/jpg/header-background.jpg")}
         />
       </View>
     );
