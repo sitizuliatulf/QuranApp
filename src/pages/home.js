@@ -1,9 +1,13 @@
 import React, { PureComponent } from "react";
 import { View, StyleSheet } from "react-native";
 import BoxMenu from "../components/main/box-menu";
-import Banner from "../components/main/banner";
 import Daily from "../components/main/daily";
 import Dimensions from "Dimensions";
+import BannerItem from "../components/shared/banner-item";
+import axios from "axios";
+import { prayerTimes, informationTime } from "../utils/helper";
+import { PermissionsAndroid } from "react-native";
+import Geolocation from "react-native-geolocation-service";
 
 const { height } = Dimensions.get("window");
 
@@ -12,16 +16,83 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     height: height
-  },
-  containerTextDaily: {}
+  }
 });
 
 class Home extends PureComponent {
+  constructor() {
+    super();
+    this.state = {
+      times: {
+        name: "",
+        time: ""
+      }
+    };
+  }
+
+  getPermissionAndroid = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      return true;
+    }
+    throw new Error();
+  };
+
+  getCurrentLocation = () => {
+    return new Promise((resolve, rejects) => {
+      return Geolocation.getCurrentPosition(
+        position => resolve(position),
+        _ => rejects()
+      );
+    });
+  };
+
+  getFetchLocation = ({ longitude, latitude }) => {
+    return axios.get(`https://time.siswadi.com/pray/${latitude}/${longitude}`);
+  };
+
+  async componentDidMount() {
+    let response;
+    try {
+      await this.getPermissionAndroid();
+      const position = await this.getCurrentLocation();
+      console.log(response);
+      response = await this.getFetchLocation({
+        longitude: position.coords.longitude,
+        latitude: position.coords.latitude
+      });
+      console.log(response);
+      this.setState({
+        times: prayerTimes(response.data.data)
+      });
+    } catch (e) {
+      console.log(e, "error");
+      response = this.getFetchLocation({
+        latitude: -6.1744651,
+        longitude: 106.822745
+      });
+      this.setState({
+        times: prayerTimes(response.data.data)
+      });
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.banner}>
-          <Banner />
+          <BannerItem
+            animation={require("../../assets/png/mosque.png")}
+            header={this.state.times.name}
+            name={"md-notifications"}
+            size={18}
+            color={"white"}
+            statusIcon={"Mute"}
+            informationTime={this.state.times.time}
+            detailInformationTime={informationTime(this.state.times)}
+          />
         </View>
         <View style={styles.boxMenu}>
           <BoxMenu {...this.props} />

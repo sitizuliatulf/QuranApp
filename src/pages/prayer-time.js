@@ -1,8 +1,10 @@
 import React, { PureComponent } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList } from "react-native";
 import BannerItem from "../components/shared/banner-item";
 import axios from "axios";
-import { DetailTime } from "../utils/helper";
+import { informationTime, trasformPrayerTimesToArr } from "../utils/helper";
+import { PermissionsAndroid } from "react-native";
+import Geolocation from "react-native-geolocation-service";
 
 class PrayerTime extends PureComponent {
   constructor() {
@@ -12,43 +14,58 @@ class PrayerTime extends PureComponent {
     };
   }
 
-  componentDidMount() {
-    axios
-      .get("https://time.siswadi.com/pray/-6.1744651000/106.8227450000")
-      .then(response => {
-        // const keyOfTime = response.data.data;
-        // let tmp = [];
-        // for (var key in keyOfTime) {
-        //   var valueOfKey = response.data.data[key];
-        //   if (typeof valueOfKey === "string") {
-        //     tmp = tmp.concat({
-        //       name: key,
-        //       time: valueOfKey
-        //     });
-        //   }
-        // }
-        const keyOfTime = response.data.data;
-        let tmp = [];
-        var key = Object.keys(keyOfTime);
-        for (let i = 0; i < key.length; i++) {
-          if (
-            key[i] == "Fajr" ||
-            key[i] == "Dhuhr" ||
-            key[i] == "Asr" ||
-            key[i] == "Maghrib" ||
-            key[i] == "Isha"
-          ) {
-            tmp = tmp.concat({
-              name: key[i],
-              time: response.data.data[key[i]]
-            });
-          }
-        }
-        this.setState({ prayerTimes: tmp });
-      })
-      .catch(error => {
-        console.log(error);
+  // single responbility function
+  // ambil permission dari hp
+  // kalau misalkan diizinkan gue dapetin longitude latitude dari hardware gue
+  // tapi kalau misalkan gak diizinin gue callin gapi get waktu sholat pake longitude dan latitude
+  // yg dfault
+  // ketika gue gagal dapetin longitude dan latitude maka gue lakuin step diatas
+  // kalau misalkan berhasil maka gue calling api pake yang udah
+
+  getPermissionAndroid = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      return true;
+    }
+    throw new Error();
+  };
+
+  getCurrentLocation = () => {
+    return new Promise((resolve, rejects) => {
+      return Geolocation.getCurrentPosition(
+        position => resolve(position),
+        _ => rejects()
+      );
+    });
+  };
+
+  getFetchLocation = ({ longitude, latitude }) => {
+    return axios.get(`https://time.siswadi.com/pray/${latitude}/${longitude}`);
+  };
+
+  async componentDidMount() {
+    let response;
+    try {
+      await this.getPermissionAndroid();
+      const position = await this.getCurrentLocation();
+      response = await this.getFetchLocation({
+        longitude: position.coords.longitude,
+        latitude: position.coords.latitude
       });
+      this.setState({
+        prayerTimes: trasformPrayerTimesToArr(response.data.data)
+      });
+    } catch (e) {
+      response = this.getFetchLocation({
+        latitude: -6.1744651,
+        longitude: 106.822745
+      });
+      this.setState({
+        prayerTimes: trasformPrayerTimesToArr(response.data.data)
+      });
+    }
   }
 
   _renderItem = ({ item }) => {
@@ -61,7 +78,7 @@ class PrayerTime extends PureComponent {
         color={"white"}
         statusIcon={"Mute"}
         informationTime={item.time}
-        detailInformationTime={DetailTime(item)}
+        detailInformationTime={informationTime(item)}
       />
     );
   };
