@@ -21,7 +21,13 @@ export const informationTime = item => {
 };
 
 export const prayerTimes = data => {
-  let tmp = {};
+  let tmp = {
+    name: "",
+    time: ""
+  };
+
+  console.log(555);
+
   let time = new Date();
   let currHour = time.getHours();
   let currMinutes = time.getMinutes();
@@ -31,12 +37,6 @@ export const prayerTimes = data => {
   //key = Fajr,Sunrise,Dhuhr
 
   for (let i = 0; i < key.length; i++) {
-    let timeFromApi = data[key[i]];
-    let hourApi = parseInt(timeFromApi.split(":")[0]);
-    let minutesApi = parseInt(timeFromApi.split(":")[1]);
-    let hourApiToMinutes = hourApi * 60;
-    let getTimeFromApi = hourApiToMinutes + minutesApi;
-
     if (
       key[i] == "Fajr" ||
       key[i] == "Dhuhr" ||
@@ -44,6 +44,12 @@ export const prayerTimes = data => {
       key[i] == "Maghrib" ||
       key[i] == "Isha"
     ) {
+      let timeFromApi = data[key[i]];
+      let hourApi = parseInt(timeFromApi.split(":")[0]);
+      let minutesApi = parseInt(timeFromApi.split(":")[1]);
+      let hourApiToMinutes = hourApi * 60;
+      let getTimeFromApi = hourApiToMinutes + minutesApi;
+
       if (currTime < getTimeFromApi) {
         tmp = {
           name: key[i],
@@ -51,8 +57,23 @@ export const prayerTimes = data => {
         };
         break;
       }
+      // jika waktu sekarang lebih dari value  time index terakhir
+      // dimana key nya [fajr,dhuhr,asr,magrib,isha]
+      // length = 5
+      // kalau waktu sekarang udah melewati value dari index ke 5
+      // maka waktu mendekati value dari index ke 1
+
+      if (currTime > getTimeFromApi && i == key.length - 1) {
+        var names = key[0];
+        var times = data[names];
+        tmp = {
+          name: names,
+          time: times
+        };
+      }
     }
   }
+
   return tmp;
 };
 

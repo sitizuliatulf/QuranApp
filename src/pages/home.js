@@ -58,17 +58,16 @@ class Home extends PureComponent {
     try {
       await this.getPermissionAndroid();
       const position = await this.getCurrentLocation();
-      console.log(response);
       response = await this.getFetchLocation({
         longitude: position.coords.longitude,
         latitude: position.coords.latitude
       });
-      console.log(response);
+      const data = prayerTimes(response.data.data);
       this.setState({
-        times: prayerTimes(response.data.data)
+        times: data
       });
     } catch (e) {
-      console.log(e, "error");
+      console.log(e);
       response = this.getFetchLocation({
         latitude: -6.1744651,
         longitude: 106.822745
