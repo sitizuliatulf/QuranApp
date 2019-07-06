@@ -94,7 +94,7 @@ class Home extends PureComponent {
           />
         </View>
         <View style={styles.boxMenu}>
-          <BoxMenu {...this.props} />
+          <BoxMenu navigation={this.props.navigation} />
         </View>
         <View style={styles.containerTextDaily}>
           <Daily />

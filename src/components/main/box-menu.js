@@ -28,7 +28,8 @@ const DataIcon = [
   },
   {
     icon: TimeSholat,
-    label: "Prayer Time"
+    label: "Prayer Time",
+    navigationPath: "PrayerTime"
   },
   {
     icon: Halal,
@@ -53,12 +54,16 @@ class BoxMenu extends PureComponent {
     super();
   }
 
-  _renderItem = ({ item: { label, icon, onPress } }) => {
+  _navigate = navigationPath => () => {
+    this.props.navigation.navigate(navigationPath);
+  };
+
+  _renderItem = ({ item: { label, navigationPath, icon } }) => {
     return (
       <BoxItem
         icon={icon}
         label={label}
-        onPress={() => this.props.navigation.navigate("PrayerTime")}
+        onPress={this._navigate(navigationPath)}
       />
     );
   };

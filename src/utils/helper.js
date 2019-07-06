@@ -1,4 +1,7 @@
 export const informationTime = item => {
+  if (item.name == "" && item.time == "") {
+    return "Fetching data ...";
+  }
   let date = new Date();
   let currHour = date.getHours();
   let currMinutes = date.getMinutes();
@@ -14,10 +17,18 @@ export const informationTime = item => {
   let resultTime = getTimeFromApi - currTime;
   let minutes = resultTime % 60;
   let hour = (resultTime - minutes) / 60;
+
+  let dayHour = 24;
+  let passMinutes = dayHour * 60;
+  let times = passMinutes - currTime;
+  let getPassTimes = times + getTimeFromApi;
+  let nextMinutes = getPassTimes % 60;
+  let nextHour = (getPassTimes - nextMinutes) / 60;
+
   if (currTime < getTimeFromApi) {
     return `Time ${hour} hour ${minutes} minutes until ${item.name}`;
   }
-  return `Waktu sudah melebihi`;
+  return `Time ${nextHour} hour ${nextMinutes} minutes until ${item.name}`;
 };
 
 export const prayerTimes = data => {
@@ -25,8 +36,6 @@ export const prayerTimes = data => {
     name: "",
     time: ""
   };
-
-  console.log(555);
 
   let time = new Date();
   let currHour = time.getHours();
@@ -73,7 +82,6 @@ export const prayerTimes = data => {
       }
     }
   }
-
   return tmp;
 };
 
@@ -86,7 +94,8 @@ export const trasformPrayerTimesToArr = data => {
       key[i] == "Fajr" ||
       key[i] == "Dhuhr" ||
       key[i] == "Asr" ||
-      (key[i] == "Maghrib") | (key[i] == "Isha")
+      key[i] == "Maghrib" ||
+      key[i] == "Isha"
     ) {
       tmp = tmp.concat({
         name: key[i],
